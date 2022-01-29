@@ -8,6 +8,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RideBot extends TelegramLongPollingCommandBot {
 
     //Класс для обработки сообщений, не являющихся командой
