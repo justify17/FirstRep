@@ -1,14 +1,25 @@
 /*
+
 package Commands;
 
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
+
 public class Test {
-    public static void main(String[] args) {
-        TransportRoutes tr = new TransportRoutes("Предприятие%20Коминтерн");
-        TransportRoutes tr2 = new TransportRoutes("Проспект%20Речицкий");
-        tr.searcher();
-        tr2.searcher();
-        System.out.println(tr.searchForTheDesiredRoutesTroll(tr2));
-        System.out.println(tr.searchForTheDesiredRoutesBuses(tr2));
+    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
+        TransportStop transportStopOne = new TransportStop("Вокзал");
+        transportStopOne.searcher();
+        TransportStop transportStopTWo = new TransportStop("Предприятие%20Коминтерн");
+        transportStopTWo.searcher();
+        transportStopOne.searchDesiredRoutesBuses(transportStopTWo);
+        transportStopOne.searchDesiredRoutesTrolleybuses(transportStopTWo);
+        System.out.println(transportStopOne.getFinalTrolleybuses());
+        System.out.println(transportStopOne.getFinalBuses());
+        TransportRoutes nr = new TransportRoutes(transportStopOne);
+        nr.busesPageParsing();
+        nr.trolleybusesPageParsing();
+        System.out.println(nr.getNearestTransport());
     }
-}
-*/
+}*/

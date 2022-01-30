@@ -6,119 +6,68 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class TransportRoutes {
+    TransportStop transportStop;
+    private Map<String,Integer> nearestTransport = new HashMap<>();
 
-    private  List<String> trolleybuses = new ArrayList<>();
-    private List<String> buses = new ArrayList<>();
-    private String message;
-
-
-    public TransportRoutes(String message){
-        this.message = message;
+    public TransportRoutes(TransportStop transportStop) {
+        this.transportStop = transportStop;
     }
 
-    public String pageParsing(){
+    public void busesPageParsing(){
         Document doc = null;
         try {
-            doc = Jsoup.connect("https://kogda.by/stops/gomel/"+message).get();
+            doc = Jsoup.connect(transportStop.URLFormatting()).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Elements newsHeadlines = doc.select("div.transport-block");
-        StringBuilder sb = new StringBuilder();
-        for (Element headline : newsHeadlines) {
-            sb.append(headline.text()+" ");
-        }
-        return sb.toString();
-    }
-
-    public void searchTrolleybuses(String str){
-        Pattern pattern = Pattern.compile("Троллейбусы[^А-Я]+");
-        Matcher matcher = pattern.matcher(str);
-        while(matcher.find()){
-            pattern = Pattern.compile("[\\d]+[а-яА-Я]?");
-            matcher = pattern.matcher(matcher.group());
+        Elements elements = doc.getElementsByAttributeValue("data-transport","autobus");
+        for(Element element:elements){
+            Pattern pattern = Pattern.compile("([0-9]+[а-я]?)\\s[()А-Яа-яЁё.-]+\\s?[()А-Яа-яЁё.-]*\\s?[()А-Яа-яЁё.]*[-]" +
+                    "{1}([()А-Яа-яЁё.-]+\\s?[()А-Яа-яЁё.-]*\\s?[()А-Яа-яЁё.]*)\\s([\\d]|[1][\\d])\\sмин");
+            Matcher matcher = pattern.matcher(element.text());
             while(matcher.find()){
-                trolleybuses.add(matcher.group());
-            }
-        }
-    }
-
-    public void searchBuses(String str){
-        Pattern pattern = Pattern.compile("Автобусы[^А-Я]+");
-        Matcher matcher = pattern.matcher(str);
-        while(matcher.find()){
-            pattern = Pattern.compile("[\\d]+[а-яА-Я]?");
-            matcher = pattern.matcher(matcher.group());
-            while(matcher.find()){
-                buses.add(matcher.group());
-            }
-        }
-    }
-
-    public void searcher(){
-        String result = pageParsing();
-        searchTrolleybuses(result);
-        searchBuses(result);
-    }
-
-    public List<String> getTrolleybuses() {
-        return trolleybuses;
-    }
-
-    public List<String> getBuses() {
-        return buses;
-    }
-
-    public String searchForTheDesiredRoutesTroll(TransportRoutes tr){
-        List<String> allTrollOne = this.getTrolleybuses();
-        List<String> allTrollTwo = tr.getTrolleybuses();
-        System.out.println(allTrollOne);
-        System.out.println(allTrollTwo);
-        List<String> finalTrolleybuses = new ArrayList<>();
-        ListIterator<String> itTrollOne = allTrollOne.listIterator();
-        while (itTrollOne.hasNext()){
-            String strOne = itTrollOne.next();
-            for (String string: allTrollTwo){
-                if (strOne.equals(string)){
-                    finalTrolleybuses.add(strOne);
+                for (String bus: transportStop.getFinalBuses()){
+                    if (/*!matcher.group(2).equals(transportStop.getStopName()) &&*/ matcher.group(1).equals(bus)){
+                        nearestTransport.put("Автобус № "+matcher.group(1),Integer.valueOf(matcher.group(3)));
+                    }
                 }
             }
         }
-        StringBuilder sb = new StringBuilder();
-        for (String string: finalTrolleybuses){
-            sb.append(string).append(" ");
-        }
-        System.out.println(sb);
-        return sb.toString();
     }
 
-    public String searchForTheDesiredRoutesBuses(TransportRoutes tr){
-        List<String> allBusOne = this.getBuses();
-        List<String> allBusTwo = tr.getBuses();
-        System.out.println(allBusOne);
-        System.out.println(allBusTwo);
-        List<String> finalBuses = new ArrayList<>();
-        ListIterator<String> itBusOne = allBusOne.listIterator();
-        while (itBusOne.hasNext()){
-            String strOne = itBusOne.next();
-            for (String string: allBusTwo){
-                if (strOne.equals(string)){
-                    finalBuses.add(strOne);
+    public void trolleybusesPageParsing(){
+        Document doc = null;
+        try {
+            doc = Jsoup.connect(transportStop.URLFormatting()).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements elements = doc.getElementsByAttributeValue("data-transport","trolleybus");
+        for(Element element:elements){
+            Pattern pattern = Pattern.compile("([0-9]+[а-я]?)\\s[()А-Яа-яЁё.-]+\\s?[()А-Яа-яЁё.-]*\\s?[()А-Яа-яЁё.]*[-]" +
+                    "{1}([()А-Яа-яЁё.-]+\\s?[()А-Яа-яЁё.-]*\\s?[()А-Яа-яЁё.]*)\\s([\\d]|[1][\\d])\\sмин");
+            Matcher matcher = pattern.matcher(element.text());
+            while(matcher.find()){
+                for(String troll: transportStop.getFinalTrolleybuses()){
+                    if (/*!matcher.group(2).equals(transportStop.getStopName()) && */matcher.group(1).equals(troll)){
+                        nearestTransport.put("Троллейбус № "+matcher.group(1),Integer.valueOf(matcher.group(3)));
+                    }
                 }
             }
         }
-        StringBuilder sb = new StringBuilder();
-        for (String string: finalBuses){
-            sb.append(string).append(" ");
-        }
-        System.out.println(sb);
-        return sb.toString();
+    }
+
+    public Map<String, Integer> getNearestTransport() {
+        nearestTransport = nearestTransport.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+        return nearestTransport;
     }
 }
