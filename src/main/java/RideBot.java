@@ -1,6 +1,6 @@
-import Commands.Config;
-import Commands.NonCommand;
-import Commands.StartCommand;
+import BotObjects.Config;
+import BotObjects.Commands.NonCommandChat;
+import BotObjects.Commands.StartCommand;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -8,13 +8,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RideBot extends TelegramLongPollingCommandBot {
 
     //Класс для обработки сообщений, не являющихся командой
-    private final NonCommand nonCommand;
+    private final NonCommandChat nonCommand;
 
     /**
      * Настройки файла для разных пользователей. Ключ - уникальный id чата
@@ -23,8 +20,8 @@ public class RideBot extends TelegramLongPollingCommandBot {
     public RideBot() {
         super();
         //создаём вспомогательный класс для работы с сообщениями, не являющимися командами
-        this.nonCommand = new NonCommand();
-        register(new StartCommand("start", "Старт"));
+        this.nonCommand = new NonCommandChat();
+        register(new StartCommand("go", "Старт"));
     }
 
     @Override
@@ -45,7 +42,6 @@ public class RideBot extends TelegramLongPollingCommandBot {
         Message msg = update.getMessage();
         Long chatId = msg.getChatId();
         String userName = getUserName(msg);
-
         String answer = nonCommand.nonCommandExecute(chatId, userName, msg.getText());
         setAnswer(chatId, userName, answer);
     }

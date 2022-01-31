@@ -1,4 +1,4 @@
-package Commands;
+package BotObjects;
 
 public interface Config {
     String BOT_NAME = "";

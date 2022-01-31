@@ -1,20 +1,24 @@
-package Commands;
+package BotObjects.Commands;
 
-public class NonCommand {
-    private static int countMessage;
+import BotObjects.BotStates;
+import BotObjects.TransportRoutes;
+import BotObjects.TransportStop;
+
+public class NonCommandChat {
+    static volatile BotStates botState = BotStates.NO_WORK;
     TransportStop startStop;
     TransportStop finalStop;
 
     public String nonCommandExecute(Long chatId, String userName, String text) {
-        String msg = "";
-        if (countMessage == 0){
+        String msg = "Введите /go для начала работы бота.";
+        if (botState == BotStates.WAIT_FIRST_STOP){
             startStop = new TransportStop(text);
             startStop.searcher();
-            msg="Введите вторую остановку:";
-            countMessage++;
+            msg="Куда вам нужно доехать?";
+            botState = BotStates.WAIT_SECOND_STOP;
             return msg;
         }
-        if (countMessage == 1) {
+        if (botState == BotStates.WAIT_SECOND_STOP) {
             finalStop = new TransportStop(text);
             finalStop.searcher();
             startStop.searchDesiredRoutesTrolleybuses(finalStop);
@@ -22,8 +26,8 @@ public class NonCommand {
             TransportRoutes routes = new TransportRoutes(startStop);
             routes.busesPageParsing();
             routes.trolleybusesPageParsing();
-            msg = " "+routes.getNearestTransport();
-            countMessage = 0;
+            msg = routes.getNearestTransportByMessage();
+            botState = BotStates.NO_WORK;
             return msg;
         }
         return msg;

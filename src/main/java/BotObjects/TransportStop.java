@@ -1,4 +1,4 @@
-package Commands;
+package BotObjects;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,11 +12,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TransportStop {
-    private  List<String> allTrolleybusesAtStop = new ArrayList<>();
-    private List<String> allBusesAtStop = new ArrayList<>();
-    private String stopName;
-    private  List<String> finalTrolleybuses = new ArrayList<>();
-    private List<String> finalBuses = new ArrayList<>();
+    private final List<String> allTrolleybusesAtStop = new ArrayList<>();
+    private final List<String> allBusesAtStop = new ArrayList<>();
+    private final String stopName;
+    private final List<String> finalTrolleybuses = new ArrayList<>();
+    private final List<String> finalBuses = new ArrayList<>();
 
     public List<String> getFinalTrolleybuses() {
         return finalTrolleybuses;
@@ -27,11 +27,20 @@ public class TransportStop {
     }
 
     public TransportStop(String stopName){
-        this.stopName = stopName;
+        this.stopName = stopNameFormatting(stopName);
+    }
+
+    private String stopNameFormatting(String stopName){
+        if (stopName.equalsIgnoreCase("ЗИП")){
+            return  "Завод Измерительных Приборов";
+        } else if (stopName.equalsIgnoreCase("Домой")){
+            return "Кинотеатр Октябрь";
+        }
+        return stopName.trim();
     }
 
     public String URLFormatting(){
-        return "https://kogda.by/stops/gomel/"+stopName;
+        return "https://kogda.by/stops/gomel/"+stopName.replaceAll(" +","%20");
     }
 
     public String pageParsing(){
@@ -50,6 +59,7 @@ public class TransportStop {
     }
 
     public void searchAllTrolleybusesAtStop(String str){
+        System.out.println(stopName);
         Pattern pattern = Pattern.compile("Троллейбусы[^А-Я]+");
         Matcher matcher = pattern.matcher(str);
         while(matcher.find()){
@@ -63,6 +73,7 @@ public class TransportStop {
     }
 
     public void searchAllBusesAtStop(String str){
+        System.out.println(stopName);
         Pattern pattern = Pattern.compile("Автобусы[^А-Я]+");
         Matcher matcher = pattern.matcher(str);
         while(matcher.find()){

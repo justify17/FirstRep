@@ -1,6 +1,5 @@
 /*
-
-package Commands;
+package BotObjects;
 
 import org.xml.sax.SAXException;
 
@@ -9,7 +8,8 @@ import java.io.*;
 
 public class Test {
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
-        TransportStop transportStopOne = new TransportStop("Вокзал");
+        */
+/*TransportStop transportStopOne = new TransportStop("Вокзал");
         transportStopOne.searcher();
         TransportStop transportStopTWo = new TransportStop("Предприятие%20Коминтерн");
         transportStopTWo.searcher();
