@@ -1,8 +1,8 @@
 package BotObjects.Commands;
 
 import BotObjects.BotStates;
-import BotObjects.TransportRoutes;
-import BotObjects.TransportStop;
+import BotObjects.WorkObjects.TransportRoutes;
+import BotObjects.WorkObjects.TransportStop;
 
 public class NonCommandChat {
     static volatile BotStates botState = BotStates.NO_WORK;

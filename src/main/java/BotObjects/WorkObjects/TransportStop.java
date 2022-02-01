@@ -1,4 +1,4 @@
-package BotObjects;
+package BotObjects.WorkObjects;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,22 +12,30 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TransportStop {
-    private final List<String> allTrolleybusesAtStop = new ArrayList<>();
-    private final List<String> allBusesAtStop = new ArrayList<>();
+    private final List<Trolleybus> allTrolleybusesAtStop = new ArrayList<>();
+    private final List<Bus> allBusesAtStop = new ArrayList<>();
     private final String stopName;
-    private final List<String> finalTrolleybuses = new ArrayList<>();
-    private final List<String> finalBuses = new ArrayList<>();
-
-    public List<String> getFinalTrolleybuses() {
-        return finalTrolleybuses;
-    }
-
-    public List<String> getFinalBuses() {
-        return finalBuses;
-    }
+    private final List<Trolleybus> necessaryTrolleybuses = new ArrayList<>();
+    private final List<Bus> necessaryBuses = new ArrayList<>();
 
     public TransportStop(String stopName){
         this.stopName = stopNameFormatting(stopName);
+    }
+
+    public List<Trolleybus> getAllTrolleybusesAtStop() {
+        return allTrolleybusesAtStop;
+    }
+
+    public List<Bus> getAllBusesAtStop() {
+        return allBusesAtStop;
+    }
+
+    public List<Trolleybus> getNecessaryTrolleybuses() {
+        return necessaryTrolleybuses;
+    }
+
+    public List<Bus> getNecessaryBuses() {
+        return necessaryBuses;
     }
 
     private String stopNameFormatting(String stopName){
@@ -36,7 +44,7 @@ public class TransportStop {
         } else if (stopName.equalsIgnoreCase("Домой")){
             return "Кинотеатр Октябрь";
         }
-        return stopName.trim();
+        return stopName;
     }
 
     public String URLFormatting(){
@@ -66,7 +74,7 @@ public class TransportStop {
             pattern = Pattern.compile("[\\d]+[а-яА-Я]?");
             matcher = pattern.matcher(matcher.group());
             while(matcher.find()){
-                allTrolleybusesAtStop.add(matcher.group());
+                allTrolleybusesAtStop.add(new Trolleybus(matcher.group()));
             }
         }
         System.out.println(allTrolleybusesAtStop);
@@ -80,7 +88,7 @@ public class TransportStop {
             pattern = Pattern.compile("[\\d]+[а-яА-Я]?");
             matcher = pattern.matcher(matcher.group());
             while(matcher.find()){
-                allBusesAtStop.add(matcher.group());
+                allBusesAtStop.add(new Bus(matcher.group()));
             }
         }
         System.out.println(allBusesAtStop);
@@ -96,33 +104,27 @@ public class TransportStop {
         return stopName;
     }
 
-    public List<String> getAllTrolleybusesAtStop() {
-        return allTrolleybusesAtStop;
-    }
-
-    public List<String> getAllBusesAtStop() {
-        return allBusesAtStop;
-    }
-
     public void searchDesiredRoutesTrolleybuses(TransportStop tr){
-        for (String strOne : this.getAllTrolleybusesAtStop()) {
-            for (String string : tr.allTrolleybusesAtStop) {
-                if (strOne.equals(string)) {
-                    finalTrolleybuses.add(strOne);
+        for (Trolleybus trolleybusOne : this.allTrolleybusesAtStop) {
+            for (Trolleybus trolleybusTwo : tr.allTrolleybusesAtStop) {
+                if (trolleybusOne.getNumber().equals(trolleybusTwo.getNumber())) {
+                    necessaryTrolleybuses.add(trolleybusOne);
                 }
             }
         }
-        System.out.println(finalTrolleybuses);
+        System.out.println("Троллейбусы, которые едут по маршруту "+ this.getStopName()+" -> "+
+                tr.getStopName()+":\n"+necessaryTrolleybuses);
     }
 
     public void searchDesiredRoutesBuses(TransportStop tr){
-        for (String strOne : this.getAllBusesAtStop()) {
-            for (String string : tr.getAllBusesAtStop()) {
-                if (strOne.equals(string)) {
-                    finalBuses.add(strOne);
+        for (Bus busOne : this.allBusesAtStop) {
+            for (Bus busTwo : tr.allBusesAtStop) {
+                if (busOne.getNumber().equals(busTwo.getNumber())) {
+                    necessaryBuses.add(busOne);
                 }
             }
         }
-        System.out.println(finalBuses);
+        System.out.println("Автобусы, которые едут по маршруту "+ this.getStopName()+" -> "+
+                tr.getStopName()+":\n"+necessaryBuses);
     }
 }
