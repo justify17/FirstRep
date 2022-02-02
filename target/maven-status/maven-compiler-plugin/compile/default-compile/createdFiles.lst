@@ -1,0 +1,13 @@
+BotObjects\Commands\StartCommand.class
+BotObjects\BotStates.class
+BotObjects\Commands\Keyboard.class
+BotObjects\WorkObjects\Transport.class
+BotObjects\WorkObjects\TransportRoutes.class
+BotObjects\Commands\WorkChat.class
+BotObjects\Config.class
+AppLauncher.class
+BotObjects\WorkObjects\TransportStop.class
+BotObjects\WorkObjects\Bus.class
+RideBot.class
+BotObjects\Commands\ServiceCommand.class
+BotObjects\WorkObjects\Trolleybus.class

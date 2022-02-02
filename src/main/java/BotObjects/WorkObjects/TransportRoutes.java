@@ -10,6 +10,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Класс для поиска ближайшего по времени транспорта с выбранной остановки
+ */
 public class TransportRoutes {
     private final List<Transport> nearestTransport = new ArrayList<>();
     private final TransportStop transportStop;
@@ -74,6 +77,7 @@ public class TransportRoutes {
         if (sb.toString().trim().length() == 0) {
             return "Ошибка, проверьте правильность написания остановок.";
         }
+        System.out.println("Ближайший транспорт:\n" + sb);
         return "Ближайший транспорт:\n" + sb;
     }
 }

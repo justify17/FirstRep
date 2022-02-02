@@ -12,7 +12,7 @@ public abstract class Transport {
         return arrivalTime;
     }
 
-    public String getRouteInformation(){
+    public String getRouteInformation() {
         return "Транспорт";
     }
 }
