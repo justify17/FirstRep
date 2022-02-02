@@ -2,6 +2,8 @@ import BotObjects.Commands.Keyboard;
 import BotObjects.Config;
 import BotObjects.Commands.WorkChat;
 import BotObjects.Commands.StartCommand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -11,6 +13,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class RideBot extends TelegramLongPollingCommandBot {
     private final WorkChat chat;
+    final static Logger logger = LoggerFactory.getLogger(RideBot.class);
 
     public RideBot() {
         super();
@@ -36,6 +39,7 @@ public class RideBot extends TelegramLongPollingCommandBot {
         Message msg = update.getMessage();
         Long chatId = msg.getChatId();
         String userName = getUserName(msg);
+        logger.info("userName: " + userName + "(chatId: " + chatId + ") ввёл " + msg.getText());
         String answer = chat.nonCommandExecute(chatId, userName, msg.getText());
         setAnswer(chatId, userName, answer);
     }
@@ -67,7 +71,7 @@ public class RideBot extends TelegramLongPollingCommandBot {
         try {
             execute(answer);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            logger.error(e + " Не удалось отправить ответ userName: " + userName + "(chatId: " + chatId + ").");
         }
     }
 }

@@ -4,6 +4,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
@@ -14,6 +16,7 @@ import java.util.regex.Pattern;
  * Класс для поиска ближайшего по времени транспорта с выбранной остановки
  */
 public class TransportRoutes {
+    final static Logger logger = LoggerFactory.getLogger(TransportRoutes.class);
     private final List<Transport> nearestTransport = new ArrayList<>();
     private final TransportStop transportStop;
 
@@ -75,9 +78,10 @@ public class TransportRoutes {
                 .sorted(Comparator.comparing(Transport::getArrivalTime))
                 .forEach((transport -> sb.append(transport.getRouteInformation())));
         if (sb.toString().trim().length() == 0) {
+            logger.info("Пользователь ошибся при написании остановок и не получил результат.");
             return "Ошибка, проверьте правильность написания остановок.";
         }
-        System.out.println("Ближайший транспорт:\n" + sb);
+        logger.info("Пользователь получил результат.");
         return "Ближайший транспорт:\n" + sb;
     }
 }

@@ -74,7 +74,6 @@ public class TransportStop {
     }
 
     public void searchAllTrolleybusesAtStop(String str) {
-        System.out.println(stopName);
         Pattern pattern = Pattern.compile("Троллейбусы[^А-Я]+");
         Matcher matcher = pattern.matcher(str);
         while (matcher.find()) {
@@ -84,11 +83,9 @@ public class TransportStop {
                 allTrolleybusesAtStop.add(new Trolleybus(matcher.group()));
             }
         }
-        System.out.println(allTrolleybusesAtStop);
     }
 
     public void searchAllBusesAtStop(String str) {
-        System.out.println(stopName);
         Pattern pattern = Pattern.compile("Автобусы[^А-Я]+");
         Matcher matcher = pattern.matcher(str);
         while (matcher.find()) {
@@ -98,7 +95,6 @@ public class TransportStop {
                 allBusesAtStop.add(new Bus(matcher.group()));
             }
         }
-        System.out.println(allBusesAtStop);
     }
 
     public void searcher() {
@@ -115,8 +111,6 @@ public class TransportStop {
                 }
             }
         }
-        System.out.println("Троллейбусы, которые едут по маршруту " + this.getStopName() + " -> " +
-                tr.getStopName() + ":\n" + necessaryTrolleybuses);
     }
 
     public void searchDesiredRoutesBuses(TransportStop tr) {
@@ -127,7 +121,5 @@ public class TransportStop {
                 }
             }
         }
-        System.out.println("Автобусы, которые едут по маршруту " + this.getStopName() + " -> " +
-                tr.getStopName() + ":\n" + necessaryBuses);
     }
 }
