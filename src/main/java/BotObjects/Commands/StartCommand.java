@@ -25,7 +25,7 @@ public class StartCommand extends ServiceCommand {
         // обращаемся к методу суперкласса для отправки пользователю ответа
         logger.info("userName: " + user.getUserName() + "(chatId: " + chat.getId() + ") ввёл " + "/go");
         sendAnswer(absSender, chat.getId(), this.getCommandIdentifier(), userName,
-                "Где вы сейчас находитесь?");
+                "Где вы сейчас находитесь?\nВведите полное название остановки:");
         WorkChat.setBotState(BotStates.WAIT_FIRST_STOP);
     }
 }
