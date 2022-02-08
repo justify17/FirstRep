@@ -1,6 +1,5 @@
-package BotObjects.Commands;
+package botObjects;
 
-import BotObjects.BotStates;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
@@ -20,16 +19,14 @@ public class Keyboard {
     }
 
     public void setButtonGo() {
-        if (WorkChat.getBotState() == BotStates.NO_WORK) {
-            message.setReplyMarkup(rkm);
-            rkm.setSelective(true);
-            rkm.setResizeKeyboard(true);
-            rkm.setOneTimeKeyboard(true);
-            List<KeyboardRow> keyboard = new ArrayList<>();
-            KeyboardRow keyboardFirstRow = new KeyboardRow();
-            keyboardFirstRow.add("/go");
-            keyboard.add(keyboardFirstRow);
-            rkm.setKeyboard(keyboard);
-        }
+        message.setReplyMarkup(rkm);
+        rkm.setSelective(true);
+        rkm.setResizeKeyboard(true);
+        rkm.setOneTimeKeyboard(true);
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow keyboardFirstRow = new KeyboardRow();
+        keyboardFirstRow.add("/go");
+        keyboard.add(keyboardFirstRow);
+        rkm.setKeyboard(keyboard);
     }
 }

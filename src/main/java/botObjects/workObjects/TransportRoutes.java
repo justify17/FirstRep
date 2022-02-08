@@ -1,4 +1,4 @@
-package BotObjects.WorkObjects;
+package botObjects.workObjects;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

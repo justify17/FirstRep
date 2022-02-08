@@ -1,4 +1,4 @@
-package BotObjects.WorkObjects;
+package botObjects.workObjects;
 
 public class Trolleybus extends Transport {
 

@@ -1,7 +1,6 @@
-package BotObjects.WorkObjects;
+package botObjects.workObjects;
 
 public class Bus extends Transport {
-
     public Bus(String number) {
         this.number = number;
     }

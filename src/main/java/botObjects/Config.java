@@ -1,4 +1,4 @@
-package BotObjects;
+package botObjects;
 
 public interface Config {
     String BOT_NAME = "";

@@ -1,0 +1,5 @@
+INFO     08.02.2022 14:06:50       AppLauncher - Бот начал работу
+INFO     08.02.2022 14:06:54       RideBot - userName: just_justify(chatId: 1309810527) ввёл /go
+INFO     08.02.2022 14:06:58       RideBot - userName: just_justify(chatId: 1309810527) ввёл Предприятие Коминтерн
+INFO     08.02.2022 14:07:01       RideBot - userName: just_justify(chatId: 1309810527) ввёл Домой
+INFO     08.02.2022 14:07:01       botObjects.workObjects.TransportRoutes - Пользователь получил результат.
