@@ -1,1 +1,1 @@
-t.me/Super_Ride_Bot
+http://t.me/Super_Ride_Bot
